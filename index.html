@@ -145,29 +145,29 @@ footer button {
   <h1>住宅ローンシミュレーター</h1>
   <div class="card">
     <div style="display: flex; flex-direction: column;">
-    <div class="label">希望物件価格（任意）</div>
-    <input type="number" id="propertyPrice" placeholder="例：4200">
+      <div class="label">希望物件価格（任意）</div>
+      <input type="number" id="propertyPrice" placeholder="例：4200">
 
-    <div class="label">月返済額</div>
-    <input type="number" id="monthly" value="9">
+      <div class="label">月返済額</div>
+      <input type="number" id="monthly" value="9">
 
-    <div class="label">ボーナス返済（1回）</div>
-    <input type="number" id="bonus" value="0">
+      <div class="label">ボーナス返済（1回）</div>
+      <input type="number" id="bonus" value="0">
 
-    <div class="label">固定金利（％）</div>
-    <input type="number" step="0.1" id="rate" value="1.0">
+      <div class="label">固定金利（％）</div>
+      <input type="number" step="0.1" id="rate" value="2.0">
 
-    <div class="label">ローン年数</div>
-    <select id="years">
-      <option value="35">35年</option>
-      <option value="40">40年</option>
-    </select>
+      <div class="label">ローン年数</div>
+      <select id="years">
+        <option value="35">35年</option>
+        <option value="40">40年</option>
+      </select>
 
-    <div class="label">諸費用率（％）</div>
-    <input type="number" step="0.1" id="feeRate" value="7.0">
+      <div class="label">諸費用率（％）</div>
+      <input type="number" step="0.1" id="feeRate" value="7.0">
 
-    <div class="label">用意できる頭金</div>
-    <input type="number" id="downPayment" value="0">
+      <div class="label">用意できる頭金</div>
+      <input type="number" id="downPayment" value="0">
     </div>
     <button onclick="calculate()">計算する</button>
   </div>
