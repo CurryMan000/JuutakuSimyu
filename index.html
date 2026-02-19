@@ -3,113 +3,337 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
 <title>住宅購入シミュレーター</title>
 
 <style>
-body {
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background: #f4f6f9;
-  color: #333;
-}
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  }
+footer button { 
+    background: none;
+    border: none;
+    color: #272322;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  footer button.active { 
+    font-weight: bold;
+    text-decoration: underline;
+    background-color: #f5f5f5;
+    color: #1f3c88;
+   }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    margin: 0;
+    padding: 20px;
+    padding-bottom: 80px;
+    background: #f4f6f9;
+    color: #333;
+  }
 
-h1 {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 20px;
-}
+  h1 {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
 
-.card {
-  background: #ffffff;
-  padding: 18px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
-}
+  .card {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+  }
 
-.label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #666;
-}
+  .label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #666;
+  }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 15px;
-}
+  input, select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+  }
 
-button {
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  background: #1f3c88;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
+  button {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #1f3c88;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+  }
 
-.result-title {
-  font-size: 14px;
-  color: #777;
-}
+  .result-title {
+    font-size: 14px;
+    color: #777;
+  }
 
-.result-main {
-  font-size: 34px;
-  font-weight: bold;
-  margin: 10px 0;
-}
+  .result-main {
+    font-size: 34px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
 
-.sub-result {
-  margin: 6px 0;
-  font-size: 15px;
-}
+  .sub-result {
+    margin: 6px 0;
+    font-size: 15px;
+  }
 
-.red { color: #d64545; font-weight: bold; }
-.green { color: #2d9c5f; font-weight: bold; }
+  .red { color: #d64545; font-weight: bold; }
+  .green { color: #2d9c5f; font-weight: bold; }
+  .section {
+    display: none;
+  }
+
+  .section.active {
+    display: block;
+  }
+  /*諸費用一覧*/
+  #variousSection table {
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  #variousSection th {
+    background: #f0f2f7;
+  }
+
+  #variousSection th,
+  #variousSection td {
+    border: 1px solid #ddd;
+    padding: 6px;
+  }
+  /*計算式一覧*/
+  #noteSection table {
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  #noteSection th {
+    background: #f0f2f7;
+  }
+  #noteSection th,
+  #noteSection td {
+    border: 1px solid #ddd;
+    padding: 6px;
+  }
 </style>
 </head>
 
 <body>
+<div class="simu section active" id="simuSection">
+  <h1>住宅ローンシミュレーター</h1>
+  <div class="card">
+    <div style="display: flex; flex-direction: column;">
+    <div class="label">希望物件価格（任意）</div>
+    <input type="number" id="propertyPrice" placeholder="例：4200">
 
-<h1>住宅ローンシミュレーター</h1>
+    <div class="label">月返済額</div>
+    <input type="number" id="monthly" value="9">
 
-<div class="card">
-  <div class="label">希望物件価格（任意）</div>
-  <input type="number" id="propertyPrice" placeholder="例：4200">
+    <div class="label">ボーナス返済（1回）</div>
+    <input type="number" id="bonus" value="0">
 
-  <div class="label">月返済額</div>
-  <input type="number" id="monthly" value="9">
+    <div class="label">固定金利（％）</div>
+    <input type="number" step="0.1" id="rate" value="1.0">
 
-  <div class="label">ボーナス返済（1回）</div>
-  <input type="number" id="bonus" value="0">
+    <div class="label">ローン年数</div>
+    <select id="years">
+      <option value="35">35年</option>
+      <option value="40">40年</option>
+    </select>
 
-  <div class="label">固定金利（％）</div>
-  <input type="number" step="0.1" id="rate" value="1.0">
+    <div class="label">諸費用率</div>
+    <input type="number" step="0.01" id="feeRate" value="0.07">
 
-  <div class="label">ローン年数</div>
-  <select id="years">
-    <option value="35">35年</option>
-    <option value="40">40年</option>
-  </select>
-
-  <div class="label">諸費用率</div>
-  <input type="number" step="0.01" id="feeRate" value="0.07">
-
-  <div class="label">用意できる頭金</div>
-  <input type="number" id="downPayment" value="200">
+    <div class="label">用意できる頭金</div>
+    <input type="number" id="downPayment" value="0">
+    </div>
+  </div>
+  <div>
+    <button onclick="calculate()">計算する</button>
+  </div>
+  <div class="card" id="result"></div>
 </div>
 
-<button onclick="calculate()">計算する</button>
+<div class="various section" id="variousSection">
+  <h1>諸費用一覧</h1>
+  <div class="card">
+    <h3>新築マンション（目安：3〜5％）</h3>
+    <table border="1" width="100%" cellpadding="6">
+      <tr><th>項目</th><th>内容</th><th>目安金額・割合</th></tr>
+      <tr><td>登記費用</td><td>所有権保存・抵当権設定（司法書士報酬含む）</td><td>約0.3〜0.6％</td></tr>
+      <tr><td>ローン事務手数料</td><td>銀行への手数料</td><td>約2％前後</td></tr>
+      <tr><td>保証料</td><td>銀行型ローンの場合</td><td>0〜2％</td></tr>
+      <tr><td>火災保険</td><td>10年契約が一般的</td><td>約10〜20万円</td></tr>
+      <tr><td>印紙代</td><td>契約書関連</td><td>数万円</td></tr>
+      <tr><td>修繕積立基金</td><td>引渡時一括</td><td>約20〜50万円</td></tr>
+      <tr><td>管理費前払い</td><td>数ヶ月分</td><td>数万円</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>中古マンション（目安：6〜8％）</h3>
+    <table border="1" width="100%" cellpadding="6">
+      <tr><th>項目</th><th>内容</th><th>目安金額・割合</th></tr>
+      <tr><td>仲介手数料</td><td>不動産会社へ支払い</td><td>約3％＋6万円＋税</td></tr>
+      <tr><td>登記費用</td><td>移転・抵当権（司法書士含む）</td><td>約0.5〜1％</td></tr>
+      <tr><td>ローン手数料</td><td>銀行へ支払い</td><td>約2％前後</td></tr>
+      <tr><td>保証料</td><td>銀行型ローン</td><td>銀行による</td></tr>
+      <tr><td>火災保険</td><td></td><td>約10〜20万円</td></tr>
+      <tr><td>固定資産税精算金</td><td>日割精算</td><td>数万〜十数万円</td></tr>
+      <tr><td>印紙代</td><td></td><td>数万円</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>新築戸建て（目安：6〜8％）</h3>
+    <table border="1" width="100%" cellpadding="6">
+      <tr><th>項目</th><th>内容</th><th>目安金額・割合</th></tr>
+      <tr><td>登記費用</td><td>土地＋建物</td><td>約0.8〜1.2％</td></tr>
+      <tr><td>ローン手数料</td><td></td><td>約2％前後</td></tr>
+      <tr><td>保証料</td><td></td><td>銀行による</td></tr>
+      <tr><td>火災・地震保険</td><td></td><td>約15〜30万円</td></tr>
+      <tr><td>固定資産税精算金</td><td></td><td>数万円</td></tr>
+      <tr><td>印紙代</td><td></td><td>数万円</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>中古戸建て（目安：7〜10％）</h3>
+    <table border="1" width="100%" cellpadding="6">
+      <tr><th>項目</th><th>内容</th><th>目安金額・割合</th></tr>
+      <tr><td>仲介手数料</td><td></td><td>約3％＋6万円＋税</td></tr>
+      <tr><td>登記費用</td><td></td><td>約0.8〜1.5％</td></tr>
+      <tr><td>ローン手数料</td><td></td><td>約2％前後</td></tr>
+      <tr><td>火災・地震保険</td><td></td><td>約15〜30万円</td></tr>
+      <tr><td>固定資産税精算金</td><td></td><td>数万〜十数万円</td></tr>
+      <tr><td>印紙代</td><td></td><td>数万円</td></tr>
+      <tr><td>リフォーム費用</td><td>必要な場合</td><td>物件により変動</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>注文住宅（目安：8〜12％）</h3>
+    <table border="1" width="100%" cellpadding="6">
+      <tr><th>項目</th><th>内容</th><th>目安金額・割合</th></tr>
+      <tr><td>仲介手数料（土地）</td><td>土地購入時</td><td>約3％＋6万円＋税</td></tr>
+      <tr><td>土地所有権移転登記</td><td></td><td>約0.5〜1％</td></tr>
+      <tr><td>建物表示登記</td><td>新築時必須</td><td>数万円</td></tr>
+      <tr><td>建物保存登記</td><td></td><td>数万円</td></tr>
+      <tr><td>抵当権設定登記</td><td></td><td>約0.3〜0.5％</td></tr>
+      <tr><td>地盤改良費</td><td>必要な場合</td><td>約50〜150万円</td></tr>
+      <tr><td>水道引込費用</td><td></td><td>数十万円</td></tr>
+      <tr><td>外構工事</td><td></td><td>数十万円〜</td></tr>
+      <tr><td>ローン事務手数料</td><td></td><td>約2％前後</td></tr>
+      <tr><td>火災保険</td><td></td><td>約15〜30万円</td></tr>
+      <tr><td>印紙代</td><td></td><td>数万円</td></tr>
+    </table>
+  </div>
+</div>
 
-<div class="card" id="result"></div>
+<div class="note section" id="noteSection">
+  <h1>計算式一覧</h1>
+  <div class="card">
 
+    <table width="100%" cellpadding="6">
+      <tr>
+        <th>出力項目</th>
+        <th>計算式</th>
+        <th>説明</th>
+      </tr>
+
+      <tr>
+        <td>最大物件価格</td>
+        <td>(借入可能額 ＋ 頭金) ÷ (1＋諸費用率)</td>
+        <td>頭金と諸費用を考慮した、購入可能な物件の最大価格</td>
+      </tr>
+
+      <tr>
+        <td>支払い総額</td>
+        <td>月実質返済額 × 返済回数</td>
+        <td>金利を含め、最終的に支払う総額</td>
+      </tr>
+
+      <tr>
+        <td>借入可能額</td>
+        <td>月実質返済額 × (1 − (1＋月利)<sup>-返済回数</sup>) ÷ 月利</td>
+        <td>毎月払える額から逆算した借入可能な元本</td>
+      </tr>
+
+      <tr>
+        <td>諸費用</td>
+        <td>物件価格 × 諸費用率</td>
+        <td>手続き代・税金・保険・手数料などの追加費用</td>
+      </tr>
+
+      <tr>
+        <td>初回必要額</td>
+        <td>物件価格 × 諸費用率 ＋ 頭金</td>
+        <td>購入時に最初に用意する必要がある資金</td>
+      </tr>
+
+      <tr>
+        <td>不足／余裕金額</td>
+        <td>(希望物件価格 × (1＋諸費用率)) − (借入可能額＋頭金)</td>
+        <td>資金の過不足</td>
+      </tr>
+
+      <tr>
+        <td>月実質返済額</td>
+        <td>月返済額 ＋ (ボーナス返済 × 2 ÷ 12)</td>
+        <td>ボーナスを考慮した、実質毎月支払う金額</td>
+      </tr>
+
+      <tr>
+        <td>月利</td>
+        <td>年利 ÷ 100 ÷ 12</td>
+        <td>月当たりの金利</td>
+      </tr>
+
+      <tr>
+        <td>返済回数</td>
+        <td>年数 × 12</td>
+        <td>合計返済する回数（月単位）</td>
+      </tr>
+
+    </table>
+  </div>
+</div>
+
+<footer>
+   <button class="active" onclick="switchTab('simuSection', this)">
+    <span class="material-symbols-outlined">
+      calculate
+    </span>
+   </button>
+   <button onclick="switchTab('variousSection', this)">
+    <span class="material-symbols-outlined">
+      sticky_note
+    </span>
+   </button>
+   <button onclick="switchTab('noteSection', this)">
+    <span class="material-symbols-outlined">
+      sticky_note_2
+    </span>
+   </button>
+  </footer>
 <script>
 function calculate() {
   const propertyPrice = parseFloat(document.getElementById("propertyPrice").value) * 10000 || 0;
@@ -133,8 +357,10 @@ function calculate() {
   if (!propertyPrice) {
     html += `<div class="result-title">最大物件価格</div>`;
     html += `<div class="result-main">${toMan(maxPropertyPrice)} 万円</div>`;
+    html += `<div class="sub-result">支払い総額：${toMan(monthlyTotal*n)} 万円</div>`;
     html += `<div class="sub-result">借入可能額：${toMan(loanAmount)} 万円</div>`;
-    html += `<div class="sub-result">必要現金：${toMan(downPayment + maxPropertyPrice * feeRate)} 万円</div>`;
+    html += `<div class="sub-result">諸費用：${toMan(maxPropertyPrice * feeRate)} 万円</div>`;
+    html += `<div class="sub-result">初回必要額：${toMan(maxPropertyPrice * feeRate+downPayment)} 万円</div>`;
   } else {
     const totalNeeded = propertyPrice * (1 + feeRate);
     const totalAvailable = loanAmount + downPayment;
@@ -142,8 +368,10 @@ function calculate() {
 
     html += `<div class="result-title">希望物件価格</div>`;
     html += `<div class="result-main">${toMan(propertyPrice)} 万円</div>`;
+    html += `<div class="sub-result">支払い総額：${toMan(monthlyTotal*n)} 万円</div>`;
     html += `<div class="sub-result">借入可能額：${toMan(loanAmount)} 万円</div>`;
-    html += `<div class="sub-result">必要現金：${toMan(propertyPrice * feeRate + downPayment)} 万円</div>`;
+    html += `<div class="sub-result">諸費用：${toMan(propertyPrice * feeRate )} 万円</div>`;
+    html += `<div class="sub-result">初回必要額：${toMan(propertyPrice * feeRate+downPayment)} 万円</div>`;
 
     if (difference > 0) {
       html += `<div class="sub-result red">不足金額：${toMan(difference)} 万円</div>`;
@@ -153,6 +381,12 @@ function calculate() {
   }
 
   document.getElementById("result").innerHTML = html;
+}
+function switchTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('footer button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 </script>
 
